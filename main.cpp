@@ -9,26 +9,33 @@ int main ( int argc, char **argv )
 {
     using namespace std;
 
-    bool writeHits = false;
-    string fpath = DATA_DIR "/20150702test.csv";
+    bool markingInputFile = false;
+    string csvFilePath = DATA_DIR "/20150702test.csv";
     if ( argc >= 2 ) {
-        fpath = argv[1];
+        csvFilePath = argv[1];
     } else if ( argc >= 3 ) {
-        writeHits = true;
+        csvFilePath = argv[1];
+        markingInputFile = true;
     }
 
-    string data( fpath );
-    ifstream in( data.c_str() );
-    if ( !in.is_open() ) {
+    string csvFile( csvFilePath );
+    ifstream csv( csvFile.c_str() );
+    if ( !csv.is_open() ) {
         return 1;
     }
 
-    ofstream of;
-    ofstream ofIdx;
-    of.open( (fpath + ".out.txt").c_str(), ios::out );
-    ofIdx.open( (fpath + ".outIdx.txt").c_str(), ios::out );
-    if ( !of.is_open() || !ofIdx.is_open() ) {
+    ofstream hitsIndex;
+    hitsIndex.open( (csvFilePath + ".outIdx.txt").c_str(), ios::out );
+    if ( !hitsIndex.is_open() ) {
         return 1;
+    }
+
+    ofstream markedInput;
+    if ( markingInputFile ) {
+        markedInput.open( (csvFilePath + ".out.txt").c_str(), ios::out );
+        if ( !markedInput.is_open() || !hitsIndex.is_open() ) {
+            return 1;
+        }
     }
 
     string line;
@@ -37,13 +44,12 @@ int main ( int argc, char **argv )
 
     int curId = -1;
     int lstId = -2;
-    bool inited = false;
 
-    int num = 0;
-    int hits = 0;
-    while ( getline( in, line ) ) {
+    int numLine = 0;
+    int numHits = 0;
+    while ( getline( csv, line ) ) {
 
-        ++num;
+        ++numLine;
         if ( false ) {
         } else if ( 0 == strcmp( line.c_str()+line.length()-1, "0" ) ) {
             cur = 0;
@@ -55,14 +61,14 @@ int main ( int argc, char **argv )
 
         sscanf( line.c_str(), "%d", &curId );
         if ( curId == lstId && cur != lst ) {
-            ++hits;
-            if ( writeHits ) {
-                of << line << "\t\t\t" << "hit" << endl;
+            ++numHits;
+            hitsIndex << numLine << endl;
+            if ( markingInputFile ) {
+                markedInput << line << "\t\t\t" << "hit" << endl;
             }
-            ofIdx << num << endl;
         } else {
-            if ( writeHits ) {
-                of << line << endl;
+            if ( markingInputFile ) {
+                markedInput << line << endl;
             }
         }
 
@@ -70,9 +76,11 @@ int main ( int argc, char **argv )
         lst = cur;
     }
 
-    of.close();
-    ofIdx.close();
-    cout << "Scanned " << num << " lines of file, #hits: " << hits << endl;
+    hitsIndex.close();
+    if ( markingInputFile ) {
+        markedInput.close();
+    }
+    cout << "Scanned " << numLine << " lines of file, #hits: " << numHits << endl;
 
     return 0;
 }
