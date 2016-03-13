@@ -35,3 +35,7 @@ process specified csv file & mark it
 ```
 $ ./HitChanges path/to/file.csv mark
 ```
+
+## Koan
+
+本来想用 Ｃ，但是 Windows 上居然没有 getline 这个函数，于是用了 C++。Dafuq。
