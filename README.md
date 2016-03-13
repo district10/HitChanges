@@ -2,7 +2,7 @@
 
 ## How to Compile
 
-*****Windows Visual Studio**
+**Windows Visual Studio**
 
 Use CMake-GUI to build VS Project.
 
