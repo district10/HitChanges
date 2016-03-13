@@ -11,9 +11,9 @@ int main ( int argc, char **argv )
 
     bool markingInputFile = false;
     string csvFilePath = DATA_DIR "/20150702test.csv";
-    if ( argc >= 2 ) {
+    if ( argc == 2 ) {
         csvFilePath = argv[1];
-    } else if ( argc >= 3 ) {
+    } else if ( argc == 3 ) {
         csvFilePath = argv[1];
         markingInputFile = true;
     }
@@ -25,14 +25,14 @@ int main ( int argc, char **argv )
     }
 
     ofstream hitsIndex;
-    hitsIndex.open( (csvFilePath + ".outIdx.txt").c_str(), ios::out );
+    hitsIndex.open( (csvFilePath + ".index.txt").c_str(), ios::out );
     if ( !hitsIndex.is_open() ) {
         return 1;
     }
 
     ofstream markedInput;
     if ( markingInputFile ) {
-        markedInput.open( (csvFilePath + ".out.txt").c_str(), ios::out );
+        markedInput.open( (csvFilePath + ".marked.txt").c_str(), ios::out );
         if ( !markedInput.is_open() || !hitsIndex.is_open() ) {
             return 1;
         }
