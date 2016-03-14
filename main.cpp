@@ -3,11 +3,13 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <vector>
 #include <string.h>
 
 int main ( int argc, char **argv )
 {
     using namespace std;
+    vector<int> indexes;
 
     bool markingInputFile = false;
     string csvFilePath = DATA_DIR "/20150702test.csv";
@@ -62,7 +64,8 @@ int main ( int argc, char **argv )
         sscanf( line.c_str(), "%d", &curId );
         if ( curId == lstId && cur != lst ) {
             ++numHits;
-            hitsIndex << numLine << endl;
+            indexes.push_back( numLine );
+            // hitsIndex << numLine << endl;
             if ( markingInputFile ) {
                 markedInput << line << "\t\t\t" << "hit" << endl;
             }
@@ -76,6 +79,9 @@ int main ( int argc, char **argv )
         lst = cur;
     }
 
+    for ( int i = 0; i < indexes.size(); ++i ) {
+        hitsIndex << indexes.at(i) << endl;
+    }
     hitsIndex.close();
     if ( markingInputFile ) {
         markedInput.close();
