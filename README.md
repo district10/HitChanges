@@ -12,7 +12,7 @@ Use CMake-GUI to build VS Project.
 $ cd HitChanges
 $ mkdir build && cd build
 $ cmake ..
-$ make
+$ make # or release: make ver=release
 ```
 
 ## Usage
